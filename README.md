@@ -1,35 +1,31 @@
 # IF2 – Zähler verstehen
 
-Lokale Unterrichtsseite für die FTS. Zum Starten **index.html** im Browser öffnen. Kein Server, keine Installation, keine Internetverbindung und keine externen Bibliotheken erforderlich.
+Interaktive Unterrichtsseite der Staatlichen Feintechnikschule. Läuft ohne Installation und ohne externe Bibliotheken, auch offline über `index.html`.
 
-## Inhalte
+**Online:** https://pirminheld.github.io/IF2_Zaehler/  
+**Direkt zu Aufgaben 6–8:** https://pirminheld.github.io/IF2_Zaehler/#vergleich
 
-- Vier asynchrone 3-Bit-Zähler mit T-Flipflops im Toggle-Betrieb (T = 1).
-- Gemeinsamer Takt, einzelne Halbperioden / Flanken, automatischer Lauf, vier vergleichbare Signalverläufe.
-- Sichtbare Zustände an Q und Q negiert (Überstrich), Ereigniskette der schaltenden Flipflops.
-- Separater synchron getakteter 2-Bit-Vorwärtszähler mit wahlweise synchronem oder asynchronem aktiv-high Reset; kurzer Resetimpuls zwischen Taktflanken.
+## Unterrichtsbezug
 
-| Arbeitsblatt | Aktive Flanke | Weiterleitung | Richtung |
-|---|---|---|---|
-| 3b | fallend | Q | vorwärts |
-| 3a | steigend | Q | rückwärts |
-| 3d | fallend | Q negiert | rückwärts |
-| 3c | steigend | Q negiert | vorwärts |
+- Aufgaben 3–5 des bisherigen Arbeitsblatts: vier asynchrone T-Flipflop-Zähler mit verschiedenen Taktflanken / Weiterleitungen und 2-Bit-Resetversuch.
+- Aufgabe 6: synchronen und asynchronen 3-Bit-Zähler direkt gegenüberstellen. Taktleitungen, T-Werte vor der Flanke und stabile Zustände vergleichen.
+- Aufgabe 7: Übergang 011 → 100 in 10-ns-Schritten. Asynchron: 011 → 010 → 000 → 100. Synchron: 011 → 100 nach 10 ns. Andere Startwerte sowie Überlauf sind auswählbar.
+- Aufgabe 8: zwei synchron aufgebaute 2-Bit-Zähler mit unterschiedlicher Resetart nebeneinander. Kurzer Impuls, gehaltener Reset, Taktflanken und Ereignistabelle.
 
-Q1 ist bei den 3-Bit-Zählern das niederwertigste Bit, abgelesen wird Q3 Q2 Q1. Im Reset-Bereich gilt wie auf dem Arbeitsblatt Q1 Q0. Alle Zähler starten bei 0. Der Variantenwechsel setzt die Zähler nicht zurück: Sie laufen gemeinsam am selben Takt. „Neu starten“ löscht Zustände und Verlauf. Wechsel der Resetart startet den Resetversuch neu. Die Zeitdiagramme zeigen stabile Zustände ohne reale Gatterlaufzeiten; Spalten stehen für Bedienschritte, nicht für eine kalibrierte Zeitachse. Beim kurzen Resetimpuls entstehen zwei zusätzliche Schritte bei unverändertem Takt.
+Bei den 3-Bit-Zählern ist Q1 das niederwertigste Bit; gelesen wird Q3Q2Q1. Im 2-Bit-Resetvergleich gilt wie auf dem bisherigen Blatt Q1Q0.
 
-## Einsatz in Woche 2 (45 Minuten)
+Die Laufzeitdarstellung nimmt für jedes Flipflop 10 ns an, ignoriert Gatter-/Leitungsverzögerungen und setzt stabile T-Eingänge vor der Flanke voraus. Reale synchrone Zähler sind nicht laufzeitfrei. Der Resetvergleich vernachlässigt Laufzeiten und setzt ausreichend lange Impulse mit Abstand zu den aktiven Flanken voraus.
 
-Die Lehrkraft öffnet die Seite am Beamer. Zunächst ohne Automatik arbeiten: „Welche Stufe schaltet bei der nächsten Flanke?“ Antwort vorhersagen lassen, dann genau eine Flanke weitergehen. Im Reset-Bereich bis 2 zählen, Reset setzen und synchron/asynchron vergleichen. Die Seite ersetzt die optionale Yenka-/Digital-Demonstration im vorhandenen Stundenplan; für längeres Experimentieren die Papier-Prüfphase entsprechend ersetzen.
+## Dateien
 
-## Dateien / spätere Veröffentlichung
+`index.html`, `style.css`, `counter.js`, `app.js`, `compare.css`, `compare-model.js`, `compare-ui.js`, `FTS_logo.png`, `impressum.html`, `QR_Code.png`. Die frühere SVG-QR-Datei bleibt aus Kompatibilitätsgründen erhalten; verwendet wird die geprüfte PNG-Datei.
 
-index.html, style.css, counter.js, app.js, FTS_logo.png und impressum.html zusammen hochladen. Die Seite ist für statisches Hosting einschließlich GitHub Pages vorbereitet; es wurde nichts veröffentlicht und kein Git-Remote angelegt.
+Logo und Impressum sind unverändert aus der bisherigen Seite übernommen und stimmen mit BKI2_IN_Messkette überein. Keine externen Skripte, Schriftarten oder Trackingdienste.
 
-Den erzeugten QR-Code als **QR_Code.svg** neben index.html ablegen und die Seite neu laden. Das Bild wird automatisch angezeigt. Solange die Datei fehlt oder nicht geladen werden kann, bleibt der Platzhalter sichtbar. Beim späteren Upload QR_Code.svg mit hochladen.
+## Veröffentlichung
 
-FTS-Logo und Impressum wurden aus dem vorhandenen Projekt IF1_KV-Diagramm übernommen. Das Impressum ist inhaltlich unverändert. Grundgestaltung angelehnt an dieses Projekt.
+GitHub Pages: Branch `main`, Stammverzeichnis `/`. Die PNG-Datei enthält den öffentlichen Direktlink `#vergleich`. GitHub Pages liefert die statischen Dateien ohne Build-Abhängigkeiten aus.
 
 ## Prüfung
 
-Bei vorhandenem Node.js: `node test.cjs`. Die Prüfung deckt alle acht Zustände der vier Varianten, aktive/inaktive Flanken, Modulo-Überlauf, Reset-Priorität, kurze Impulse, Bedienereignisse, Verlaufslimits und lokale Dateiverweise ab. Node wird nur zur Prüfung benötigt, nicht zum Benutzen der Seite.
+`node test.cjs` und `node test-comparison.cjs` prüfen Zählfolgen, Flanken, Überträge, Überlauf, Laufzeiten, Reset-Priorität, Bedienereignisse und Dateiverweise.

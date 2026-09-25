@@ -164,15 +164,16 @@ function renderReset(message) {
 }
 function initializeReset() {
   resetState.value = 0; resetState.clock = 0; resetState.r = 0; resetState.history = [];
-  recordReset(); renderReset('Start bei 00 und R = 0. Zähle zunächst bis 2, dann probiere den Reset aus.');
+  recordReset(); renderReset('Start bei 00 und R = 0. Zählen Sie zunächst bis 2 und probieren Sie dann den Reset aus.');
 }
 function setPanel(panel) {
   stop();
-  for (const name of ['counters', 'reset']) {
+  for (const name of ['counters', 'reset', 'comparison']) {
     $('tab-' + name).classList.toggle('selected', panel === name);
     $('tab-' + name).setAttribute('aria-pressed', String(panel === name));
   }
   $('counter-panel').hidden = panel !== 'counters'; $('reset-panel').hidden = panel !== 'reset';
+  $('comparison-panel').hidden = panel !== 'comparison';
 }
 $('variants').innerHTML = M.variants.map(v => `<button id="variant-${v.id}" class="variant" aria-pressed="false"><strong>${v.title}</strong><small>${v.edge === 'rising' ? '↑ Steigende' : '↓ Fallende'} Flanke · ${qHtml(v.inverted)}</small><div class="reading"></div></button>`).join('');
 for (const v of M.variants) $('variant-' + v.id).addEventListener('click', () => { selected = v.id; renderCounters(); });
@@ -210,3 +211,9 @@ document.querySelectorAll('input[name="reset-mode"]').forEach(input => input.add
 $('reset-start').addEventListener('click', initializeReset);
 document.addEventListener('visibilitychange', () => { if (document.hidden) stop(); });
 initializeCounters(); renderCounters(); initializeReset();
+
+$('tab-comparison').addEventListener('click', () => setPanel('comparison'));
+if (typeof window !== 'undefined') {
+  const route = () => setPanel(window.location.hash === '#vergleich' ? 'comparison' : window.location.hash === '#reset' ? 'reset' : 'counters');
+  window.addEventListener('hashchange', route); route();
+}

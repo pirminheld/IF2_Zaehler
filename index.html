@@ -6,23 +6,27 @@
 <meta name="description" content="Interaktive Zähler für den Unterricht: vier T-Flipflop-Schaltungen, Taktflanken, Signalverläufe und synchroner oder asynchroner Reset.">
 <title>Zähler verstehen · FTS Informationselektronik</title>
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="compare.css">
 <script src="counter.js" defer></script>
 <script src="app.js" defer></script>
+<script src="compare-model.js" defer></script>
+<script src="compare-ui.js" defer></script>
 </head>
 <body>
 <div class="wrap">
 <header class="masthead">
 <img class="logo" src="FTS_logo.png" alt="Staatliche Feintechnikschule" width="110" height="86">
-<div class="heading"><span class="eyebrow">IF2 · INFORMATIONSELEKTRONIK</span><h1>Zähler verstehen</h1><p>Eine Flanke. Ein neuer Zustand.</p></div>
-<div class="qr-area"><img id="qr-code" src="QR_Code.svg" alt="QR-Code zur Homepage" width="110" height="110" hidden><div id="qr-fallback" class="qr-placeholder" aria-label="Platzhalter für den späteren QR-Code"><span>QR</span><small>Platzhalter</small></div></div>
+<div class="heading"><span class="eyebrow">IF2 · INFORMATIONSELEKTRONIK</span><h1>Zähler verstehen</h1><p>Zählfolgen · Laufzeiten · Rücksetzung</p></div>
+<div class="qr-area"><img id="qr-code" src="QR_Code.png" alt="QR-Code zur Homepage" width="110" height="110" hidden><div id="qr-fallback" class="qr-placeholder" aria-label="Platzhalter für den späteren QR-Code"><span>QR</span><small>Platzhalter</small></div></div>
 </header>
 <nav class="tabs" aria-label="Lernbereiche">
-<button id="tab-counters" class="tab selected" aria-pressed="true">01 &nbsp; Vorwärts &amp; rückwärts</button>
-<button id="tab-reset" class="tab" aria-pressed="false">02 &nbsp; Reset verstehen</button>
+<button id="tab-counters" class="tab selected" aria-pressed="true">Aufgabe 3 · Zählfolgen</button>
+<button id="tab-reset" class="tab" aria-pressed="false">Aufgaben 4–5 · Reset</button>
+<button id="tab-comparison" class="tab" aria-pressed="false">Aufgaben 6–8 · Synchron / asynchron</button>
 </nav>
 <main>
 <section id="counter-panel" aria-labelledby="counter-heading">
-<div class="section-head"><div><h2 id="counter-heading">Vier Schaltungen. Derselbe Takt.</h2><p>Wähle eine Schaltung und schalte den Takt Flanke für Flanke weiter.</p></div><span class="badge">3 Bit · Modulo 8</span></div>
+<div class="section-head"><div><h2 id="counter-heading">Vier Schaltungen. Derselbe Takt.</h2><p>Wählen Sie eine Schaltung und schalten Sie den Takt Flanke für Flanke weiter.</p></div><span class="badge">3 Bit · Modulo 8</span></div>
 <div id="variants" class="variant-grid"></div>
 <div class="toolbar">
 <button id="step" class="primary">Nächste Flanke ↑</button>
@@ -66,12 +70,38 @@
 <div class="card">
 <div class="section-head"><h2>Ausgangszustand</h2><div id="reset-value" class="value"></div></div>
 <div id="reset-diagram" class="diagram-scroll"></div>
-<p id="reset-event" class="event" role="status" aria-live="polite">Zähle zunächst einige Flanken weiter. Setze dann R auf 1.</p>
+<p id="reset-event" class="event" role="status" aria-live="polite">Zählen Sie zunächst einige Flanken weiter. Setzen Sie dann R auf 1.</p>
 <div id="reset-wave"></div>
 <p class="small">Q₁ hat hier das Bitgewicht 2, Q₀ das Bitgewicht 1. Ein kurzer Resetimpuls liegt vollständig zwischen zwei Taktflanken. Die Taktung wird während des Impulses nicht verändert. Jede Spalte steht für ein Bedienereignis, nicht für eine feste Zeitdauer.</p>
 </div>
-<div class="card tryout"><h2>Gemeinsam ausprobieren</h2><ol><li>Zähle bis 2. Aktiviere R zwischen zwei Taktflanken: Ändert sich Q sofort?</li><li>Schalte bis zur nächsten steigenden Flanke. Lasse R zunächst auf 1.</li><li>Starte neu und vergleiche einen kurzen Resetimpuls bei synchroner und asynchroner Rücksetzung.</li></ol><p><strong>Merke:</strong> Die Zählerstufen sind hier synchron getaktet. „Asynchroner Reset“ beschreibt ausschließlich die Rücksetzung.</p></div>
+<div class="card tryout"><h2>Gemeinsam ausprobieren</h2><ol><li>Zählen Sie bis 2. Aktivieren Sie R zwischen zwei Taktflanken: Ändert sich Q sofort?</li><li>Schalten Sie bis zur nächsten steigenden Flanke. Lassen Sie R zunächst auf 1.</li><li>Starten Sie neu und vergleichen Sie einen kurzen Resetimpuls bei synchroner und asynchroner Rücksetzung.</li></ol><p><strong>Merke:</strong> Die Zählerstufen sind hier synchron getaktet. „Asynchroner Reset“ beschreibt ausschließlich die Rücksetzung.</p></div>
 </section>
+
+<section id="comparison-panel" hidden aria-labelledby="comparison-heading">
+<div class="section-head"><div><span class="worksheet-tag">AUFGABEN 6 &amp; 7</span><h2 id="comparison-heading">Derselbe Zählschritt. Zwei Taktwege.</h2><p class="compare-intro">Untersuchen Sie, wann die Ausgänge umschalten. Beide Zähler reagieren auf fallende Flanken; Q₁ ist das niederwertigste Bit.</p></div><span class="badge">3 Bit · 10 ns pro Flipflop</span></div>
+<div class="toolbar comparison-controls">
+<label for="compare-start">Startzustand <select id="compare-start"><option value="0">000 · 0</option><option value="1">001 · 1</option><option value="2">010 · 2</option><option value="3" selected>011 · 3</option><option value="4">100 · 4</option><option value="5">101 · 5</option><option value="6">110 · 6</option><option value="7">111 · 7</option></select></label>
+<button id="compare-step" class="primary">+10 ns weiter</button><button id="compare-play" aria-pressed="false">▶ Langsam abspielen</button><button id="compare-next" disabled>Nächster Zählvorgang</button><button id="compare-restart" class="quiet">↺ Beispiel 011 → 100</button>
+</div>
+<div class="time-range"><label for="compare-range">Zeit nach der Taktflanke</label><input id="compare-range" type="range" min="0" max="30" step="10" value="0"><output id="compare-time" for="compare-range" class="time-value">t = 0 ns</output></div>
+<div class="compare-grid">
+<article class="card"><div class="counter-kind"><div><span class="kind-label">A · Asynchron</span><h3>Takt von Stufe zu Stufe</h3></div></div><div id="async-circuit" class="diagram-scroll"></div><div id="async-bits" class="large-bits" aria-label="Asynchroner Zählerstand"></div><p id="async-decimal" class="reading-note"></p><p id="async-status" class="event compare-status" role="status"></p><div id="async-waves" class="diagram-scroll"></div></article>
+<article class="card"><div class="counter-kind"><div><span class="kind-label">B · Synchron</span><h3>Ein gemeinsamer Takt</h3></div></div><div id="sync-circuit" class="diagram-scroll"></div><div id="sync-bits" class="large-bits" aria-label="Synchroner Zählerstand"></div><p id="sync-decimal" class="reading-note"></p><p id="sync-status" class="event compare-status" role="status"></p><div id="sync-waves" class="diagram-scroll"></div></article>
+</div>
+<div class="time-steps" aria-label="Zeitpunkt wählen"><button id="time-0" aria-pressed="true">0 ns</button><button id="time-10" aria-pressed="false">10 ns</button><button id="time-20" aria-pressed="false">20 ns</button><button id="time-30" aria-pressed="false">30 ns</button></div>
+<p id="compare-summary" class="comparison-summary" role="status"></p>
+<p class="study-note"><strong>Modell wie auf dem Blatt:</strong> Alle Flipflops haben 10 ns Ausgangsverzögerung. Leitungs- und Gatterlaufzeiten werden vernachlässigt. Beim synchronen Zähler sind die T-Werte <em>vor</em> der Flanke entscheidend. Reale synchrone Zähler können wegen unterschiedlicher Ausgangsverzögerungen ebenfalls kurze Zwischenzustände zeigen.</p>
+<details class="card"><summary><strong>Zustandstabelle zum gewählten Übergang aufdecken</strong></summary><div class="table-scroll"><table><caption>Zustände jeweils unmittelbar nach dem angegebenen Zeitpunkt</caption><thead><tr><th>Zeit</th><th>A: asynchron</th><th>B: synchron</th></tr></thead><tbody id="transition-rows"></tbody></table></div></details>
+<details class="card"><summary><strong>Gegenüberstellung: Zähleraufbau</strong></summary><div class="table-scroll"><table><thead><tr><th>Merkmal</th><th>Asynchron</th><th>Synchron</th></tr></thead><tbody><tr><th>Taktquelle FF1</th><td>Externer Takt</td><td>Externer Takt</td></tr><tr><th>Taktquelle FF2 / FF3</th><td>Q₁ / Q₂</td><td>Externer Takt für beide</td></tr><tr><th>T-Eingänge</th><td>Alle 1</td><td>1; Q₁; Q₁ ∧ Q₂</td></tr><tr><th>Zustandswechsel</th><td>Nacheinander, ausgelöst durch die Vorgängerstufe</td><td>Ausgelöst durch dieselbe externe Taktflanke</td></tr><tr><th>Stabile Zählfolge</th><td colspan="2">000 → 001 → 010 → 011 → 100 → 101 → 110 → 111 → 000</td></tr></tbody></table></div></details>
+<section class="card" aria-labelledby="parallel-heading"><span class="worksheet-tag">AUFGABE 8 · ANSCHLUSS AN AUFGABEN 4 &amp; 5</span><h2 id="parallel-heading">Gleicher Zähleraufbau, unterschiedliche Resetart</h2><p>Beide 2-Bit-Zähler sind <strong>synchron aufgebaut</strong> und zählen an steigenden Flanken. Links ist der Reset synchron, rechts asynchron. Hier gilt wie im bisherigen Blatt: Q₁Q₀ mit Bitgewichten 2 und 1.</p>
+<div class="compare-reset-values"><div class="reset-reading"><h3>Synchroner Reset</h3><strong id="parallel-sync">10 = 2</strong><p>Wirkt an der aktiven Taktflanke.</p></div><div class="reset-reading"><h3>Asynchroner Reset</h3><strong id="parallel-async">10 = 2</strong><p>Wirkt unabhängig vom Takt.</p></div></div>
+<div class="toolbar"><button id="parallel-pulse" class="primary">Kurzer Resetimpuls</button><button id="parallel-toggle" aria-pressed="false">Reset R = 0</button><button id="parallel-edge">Steigende Taktflanke ↑</button><button id="parallel-restart" class="quiet">↺ Beide auf 2</button></div>
+<p id="parallel-status" class="event" role="status"></p><p class="small">R ist aktiv-high. R = 1 hält den asynchronen Zähler auf 00. Der kurze Impuls beginnt und endet zwischen zwei aktiven Flanken. Resetimpulse sind ausreichend lang; Laufzeiten werden hier vernachlässigt.</p>
+<div class="table-scroll"><table class="compare-reset-table"><caption>Letzte Bedienereignisse · Zustände nach dem Ereignis</caption><thead><tr><th>Ereignis</th><th>R</th><th>Reset synchron</th><th>Reset asynchron</th></tr></thead><tbody id="parallel-rows"></tbody></table></div>
+</section>
+<section class="card" aria-labelledby="quiz-heading"><h2 id="quiz-heading">Zwei Begriffe sauber trennen</h2><div class="quiz-grid"><label for="quiz-clock">Woran erkennt man den synchronen Zähleraufbau?<select id="quiz-clock"><option value="">Bitte wählen</option><option value="common">Alle Flipflops erhalten denselben Takt.</option><option value="instant">Die Ausgänge haben keine Laufzeit.</option></select></label><label for="quiz-reset">Kann ein synchroner Zähler einen asynchronen Reset haben?<select id="quiz-reset"><option value="">Bitte wählen</option><option value="yes">Ja, Aufbau und Resetart sind unabhängig.</option><option value="no">Nein, beide müssen synchron sein.</option></select></label></div><p><button id="quiz-check">Antworten prüfen</button></p><p id="quiz-feedback" class="quiz-feedback" role="status"></p></section>
+</section>
+
 <noscript><div class="card">Bitte JavaScript aktivieren, um die Zähler zu bedienen.</div></noscript>
 </main>
 <footer><span>FTS · Pirmin Held · Unterrichtsmaterial</span><a href="impressum.html">Impressum / Rechtliches</a><span>CC BY-NC-SA 4.0</span></footer>
